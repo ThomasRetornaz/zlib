@@ -210,6 +210,19 @@ elseif(BUILD_SHARED_LIBS AND WIN32)
     set_target_properties(zlib PROPERTIES SUFFIX "1.dll")
 endif()
 
+# #added for find package
+# SET(ZLIB_INCLUDE_DIR 
+# ${CMAKE_CURRENT_BINARY_DIR}
+# ${CMAKE_CURRENT_SOURCE_DIR}
+# PARENT_SCOPE)
+
+# SET(ZLIB_LIBRARY 
+# zlib 
+# # #zlibstatic 
+# PARENT_SCOPE)
+
+OPTION(SKIP_INSTALL_ALL "Don't install lib and headers" ON)
+
 if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
     install(TARGETS zlib zlibstatic
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
@@ -229,7 +242,8 @@ endif()
 #============================================================================
 # Example binaries
 #============================================================================
-
+OPTION(ZLIB_BUILD_EXAMPLES "Build zlib examples" OFF)
+if(ZLIB_BUILD_EXAMPLES)
 add_executable(example test/example.c)
 target_link_libraries(example zlib)
 add_test(example example)
@@ -246,4 +260,5 @@ if(HAVE_OFF64_T)
     add_executable(minigzip64 test/minigzip.c)
     target_link_libraries(minigzip64 zlib)
     set_target_properties(minigzip64 PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64")
+endif()
 endif()
